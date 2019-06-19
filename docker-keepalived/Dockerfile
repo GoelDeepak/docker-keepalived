@@ -1,9 +1,4 @@
 FROM alpine:3.8
-LABEL maintainer "Neoassist <info@neoassist.com> and Steven Iveson <steve@iveson.eu>"
-LABEL source "https://github.com/NeoAssist/docker-keepalived"
-LABEL branch "master"
-COPY Dockerfile /Dockerfile
-COPY .bashrc /root/.bashrc
 
 RUN apk --update -t add keepalived iproute2 grep bash tcpdump sed && \
     rm -f /var/cache/apk/* /tmp/* && \
