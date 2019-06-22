@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Setup check script
+if [[ -z ${CHECK_SCRIPT} ]]; then
+    CHECK_SCRIPT="curl --silent --max-time 2 --insecure https://localhost:6443/ -o /dev/null"
+fi
+
 # Substitute variables in config file.
 /bin/sed -i "s/{{VIRTUAL_IP}}/${VIRTUAL_IP}/g" /etc/keepalived/keepalived.conf
 /bin/sed -i "s/{{VIRTUAL_MASK}}/${VIRTUAL_MASK}/g" /etc/keepalived/keepalived.conf
@@ -64,9 +69,6 @@ while true; do
 
   # If $pid is null, do this to start or restart Keepalived:
   while [ -z "$pid" ]; do
-    #Obviously optional:
-    #echo "Starting Confd population of files..."
-    #/usr/bin/confd -onetime
     echo "Displaying resulting /etc/keepalived/keepalived.conf contents..."
     cat /etc/keepalived/keepalived.conf
     echo "Starting Keepalived in the background..."
@@ -84,7 +86,6 @@ while true; do
   done
 
   # Break this outer loop once we've started up successfully
-  # Otherwise, we'll silently restart and Rancher won't know
   break
 
 done
